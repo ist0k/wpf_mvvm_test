@@ -1,0 +1,141 @@
+﻿<UserControl x:Class="WinForm.Controls.MainMenu.Views.SearchBarUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WinForm.Controls.MainMenu.Views"
+             xmlns:vm="clr-namespace:WinForm.Controls.MainMenu.ViewModels"
+             mc:Ignorable="d" 
+             x:Name="SearchControl"
+             d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=vm:MainMenuViewModel}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Controls/MainMenu/Infrastructure/SharedStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="TextLinkButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Opacity" Value="0.6"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="SearchListBoxItemStyle" TargetType="ListBoxItem">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="ItemBorder" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="#F0F3F4" 
+                                    BorderThickness="0,0,0,1">
+                                <ContentPresenter />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                 Width="250" Height="30" VerticalContentAlignment="Center" Padding="5,0"/>
+
+        <Popup IsOpen="{Binding IsPopupOpen}" PlacementTarget="{Binding ElementName=SearchControl}" 
+               Placement="Bottom" StaysOpen="False" PopupAnimation="Fade">
+
+            <Border Background="White" BorderBrush="#BDC3C7" BorderThickness="1" Width="250" MaxHeight="300">
+
+                <ListBox ItemsSource="{Binding FilteredItems}" 
+                         ItemContainerStyle="{StaticResource SearchListBoxItemStyle}"
+                         BorderThickness="0">
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Background="Transparent">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Button Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"
+                                        Command="{Binding DataContext.CardClickCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                        CommandParameter="{Binding}"
+                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                        Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="BgBorder" Background="Transparent">
+                                                <ContentPresenter Visibility="Hidden"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="BgBorder" Property="Background" Value="#F8F9FA"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" 
+                                           Text="{Binding Code}" 
+                                           FontWeight="Bold" 
+                                           Foreground="#2C3E50" 
+                                           FontSize="12"
+                                           VerticalAlignment="Center"
+                                           IsHitTestVisible="False"/>
+
+                                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                                        Style="{StaticResource FavoriteToggleButtonStyle}"
+                                        Command="{Binding DataContext.ToggleFavoriteCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                        CommandParameter="{Binding}"
+                                        VerticalAlignment="Center"
+                                        Margin="5,0,0,0">
+                                </Button>
+
+                                <Button Grid.Row="1" Grid.Column="0" 
+                                        Style="{StaticResource TextLinkButtonStyle}"
+                                        Margin="0,4,0,0"
+                                        Command="{Binding DataContext.NavigateToSubCategoryCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                        CommandParameter="{Binding ParentSubCategory}">
+                                    <TextBlock Text="{Binding ParentSubCategoryName}" 
+                                               TextTrimming="CharacterEllipsis" 
+                                               FontSize="11" 
+                                               Foreground="#7F8C8D" 
+                                               Width="170" 
+                                               HorizontalAlignment="Left"/>
+                                </Button>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

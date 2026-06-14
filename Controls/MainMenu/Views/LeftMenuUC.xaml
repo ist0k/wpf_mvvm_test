@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="WinForm.Controls.MainMenu.Views.LeftMenuUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WinForm.Controls.MainMenu.Views"
+             xmlns:vm="clr-namespace:WinForm.Controls.MainMenu.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="200"
+             d:DataContext="{d:DesignInstance Type=vm:MainMenuViewModel}">
+
+    <UserControl.Resources>
+        <Style x:Key="LeftMenuItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#34495E"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="MenuBorder" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="#2ECC71" 
+                                BorderThickness="0,0,0,0" 
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="4">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#EAF2F8"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="#27AE60"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter TargetName="MenuBorder" Property="BorderThickness" Value="4,0,0,0"/>
+                                <Setter Property="Background" Value="#E8F8F5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F4F6F7">
+        <ListBox ItemsSource="{Binding SubCategories}" 
+                 SelectedItem="{Binding SelectedSubCategory}"
+                 ItemContainerStyle="{StaticResource LeftMenuItemStyle}"
+                 BorderThickness="0" 
+                 Background="Transparent"
+                 Margin="5,10">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

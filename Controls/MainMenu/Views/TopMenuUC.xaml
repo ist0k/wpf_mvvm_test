@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="WinForm.Controls.MainMenu.Views.TopMenuUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WinForm.Controls.MainMenu.Views"
+             xmlns:vm="clr-namespace:WinForm.Controls.MainMenu.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=vm:MainMenuViewModel}">
+
+    <UserControl.Resources>
+        <Style x:Key="TopMenuItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="TabBorder" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="#3498DB" 
+                                BorderThickness="0,0,0,3" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#ECF0F1"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="#3498DB"/>
+                                <Setter TargetName="TabBorder" Property="BorderThickness" Value="0,0,0,3"/>
+                                <Setter Property="Background" Value="#F8F9FA"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="TabBorder" Property="BorderThickness" Value="0,0,0,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="FavoriteTabRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Margin" Value="10,0,5,0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="TabBorder" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="#3498DB" 
+                                BorderThickness="0,0,0,0" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#ECF0F1"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Foreground" Value="#3498DB"/>
+                                <Setter TargetName="TabBorder" Property="BorderThickness" Value="0,0,0,3"/>
+                                <Setter Property="Background" Value="#F8F9FA"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="TabBorder" Property="BorderThickness" Value="0,0,0,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+
+    <Grid Background="#FFFFFF">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+            <RadioButton Content="★ Избранное"
+                         Style="{StaticResource FavoriteTabRadioButtonStyle}"
+                         IsChecked="{Binding IsFavoriteTabSelected, Mode=TwoWay}"/>
+
+            <ListBox ItemsSource="{Binding Categories}" 
+                     SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                     ItemContainerStyle="{StaticResource TopMenuItemStyle}"
+                     BorderThickness="0" 
+                     Background="Transparent"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
